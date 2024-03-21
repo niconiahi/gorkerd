@@ -30,11 +30,7 @@ func main() {
 		}
 		w.Header().Set("Content-Type", "text/javascript")
 		w.Write(jsFile)
-
 	})
-	// mux.Handle("GET /js", http.FileServer(http.FS(js)))
-
-	// jsFile, err := js.ReadFile("src/routes/home/route.js")
 
 	log.Fatal(http.ListenAndServe(":8080", mux))
 }
