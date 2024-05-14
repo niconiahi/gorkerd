@@ -4,8 +4,5 @@ dev1:
 dev2:
 	go run main.go
 
-build:
-	go build
-
-migrate:
-	goose up
+builds:
+	tinygo build -o ./build/app.wasm -target wasm -no-debug ./main.go
