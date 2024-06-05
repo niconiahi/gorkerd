@@ -3,7 +3,7 @@ import postcss from 'rollup-plugin-postcss';
 import resolve from '@rollup/plugin-node-resolve';
 
 export default ['home'].map((route) => ({
-	input: `src/routes/${route}/root.js`,
+	input: `src/routes/${route}/entry.js`,
 	output: {
 		file: `src/routes/${route}/route.js`,
 		format: 'iife',

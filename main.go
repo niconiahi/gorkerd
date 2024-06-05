@@ -1,7 +1,6 @@
 package main
 
 import (
-	"embed"
 	"html/template"
 	"log"
 	"net/http"
@@ -9,27 +8,25 @@ import (
 	"github.com/niconiahi/gorkerd/src/routes/home"
 )
 
-//go:embed src/routes/home/route.js src/routes/home/root.js
-var js embed.FS
-
 func main() {
 	mux := http.NewServeMux()
+	h := home.Handler{}
 
 	mux.HandleFunc("GET /", func(w http.ResponseWriter, r *http.Request) {
-		print("incoming request from GET /\n")
-		h := home.Handler{}
-		t := template.Must(h.GetHtml())
-		// h.GetJs()
-		t.Execute(w, h.GetData())
+		if r.URL.Path == "/" {
+			print("incoming request from GET /\n")
+			t := template.Must(h.CreateRoot())
+			t.Execute(w, h.RunLoader())
+		}
 	})
 
-	mux.HandleFunc("GET /route", func(w http.ResponseWriter, r *http.Request) {
-		jsFile, err := js.ReadFile("src/routes/home/route.js")
+	mux.HandleFunc("GET /home/route", func(w http.ResponseWriter, r *http.Request) {
+		file, err := home.Javascript.ReadFile("route.js")
 		if err != nil {
-			panic(err)
+			log.Fatal(err)
 		}
 		w.Header().Set("Content-Type", "text/javascript")
-		w.Write(jsFile)
+		w.Write(file)
 	})
 
 	log.Fatal(http.ListenAndServe(":8080", mux))

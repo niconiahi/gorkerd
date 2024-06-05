@@ -5,33 +5,24 @@ import (
 	"html/template"
 )
 
-type Event struct {
-	Name string
-}
-
-type Loader struct {
-	Event Event
-}
-
 type Handler struct{}
 
-type Data struct {
+type Loader struct {
 	date string
 }
 
-func (h *Handler) GetData() Data {
-	return Data{
+func (h *Handler) RunLoader() Loader {
+	return Loader{
 		date: "blind",
 	}
 }
 
+//go:embed route.js
+var Javascript embed.FS
+
 //go:embed root.html
 var html embed.FS
 
-func (h *Handler) GetHtml() (*template.Template, error) {
+func (h *Handler) CreateRoot() (*template.Template, error) {
 	return template.ParseFS(html, "root.html")
-}
-
-func (h *Handler) GetJs() {
-	print("getting JS\n")
 }
